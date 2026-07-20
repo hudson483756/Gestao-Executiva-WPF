@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="Projeto1_Excel.Views.FinanceiroView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="White">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <!-- Linha 0: Título -->
+            <RowDefinition Height="Auto"/>
+            <!-- Linha 1: Formulário de Lançamento -->
+            <RowDefinition Height="Auto"/>
+            <!-- Linha 2: Tabela de Dados -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. Cabeçalho Principal -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Gestão Financeira" 
+                       FontSize="22" 
+                       FontWeight="Bold" 
+                       Foreground="#1B365D"/>
+            <TextBlock Text="Lançamento e controle de vendas corporativas" 
+                       FontSize="13" 
+                       Foreground="#666666" 
+                       Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- 2. Formulário de Ações -->
+        <Border Grid.Row="1" Background="#F8FAFC" CornerRadius="8" Padding="16" Margin="0,0,0,20">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <ComboBox materialDesign:HintAssist.Hint="Selecionar Cliente" 
+                          Width="220" 
+                          Margin="0,0,12,0"/>
+
+                <ComboBox materialDesign:HintAssist.Hint="Selecionar Produto" 
+                          Width="220" 
+                          Margin="0,0,12,0"/>
+
+                <TextBox materialDesign:HintAssist.Hint="Qtd" 
+                         Width="80" 
+                         Margin="0,0,16,0" 
+                         HorizontalContentAlignment="Center"/>
+
+                <Button Content="Lançar Venda" 
+                        Background="#2E7D32" 
+                        BorderBrush="#2E7D32" 
+                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 3. Tabela de Lançamentos -->
+        <DataGrid Grid.Row="2" AutoGenerateColumns="True" IsReadOnly="True"/>
+    </Grid>
+</UserControl>

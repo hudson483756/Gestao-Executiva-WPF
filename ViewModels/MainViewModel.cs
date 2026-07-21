@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Projeto1_Excel.Views;
 using Projeto1_Excel.Views; // Caminho onde estão as UserControls
 
 namespace Projeto1_Excel.ViewModels;

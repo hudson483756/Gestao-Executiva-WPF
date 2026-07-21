@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Projeto1_Excel.Models;
 using Projeto1_Excel.Services;
-using Projeto1_Excel.Services;
 using System.Diagnostics;
 
 namespace SeuProjeto.ViewModels;

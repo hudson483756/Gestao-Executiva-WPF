@@ -6,6 +6,7 @@
 
     <Grid Margin="16">
         <TabControl materialDesign:ColorZoneAssist.Mode="SecondaryMid">
+
             <!-- ABA DE CLIENTES -->
             <TabItem Header="👥 Clientes">
                 <Grid Margin="0,16,0,0">
@@ -14,30 +15,82 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Inputs Corrigidos para MaterialDesign v4.9 -->
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,16">
                         <TextBox materialDesign:HintAssist.Hint="Razão Social / Nome" 
-                                 Width="250" Margin="0,0,10,0" 
+                                 Text="{Binding RazaoSocial, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="220" Margin="0,0,10,0" 
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                         <TextBox materialDesign:HintAssist.Hint="CPF / CNPJ" 
-                                 Width="150" Margin="0,0,10,0" 
+                                 Text="{Binding Documento, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="140" Margin="0,0,10,0" 
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                        <Button Content="Salvar" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <TextBox materialDesign:HintAssist.Hint="E-mail" 
+                                 Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="180" Margin="0,0,10,0" 
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                        <TextBox materialDesign:HintAssist.Hint="Telefone" 
+                                 Text="{Binding Telefone, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="120" Margin="0,0,10,0" 
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                        <Button Content="Salvar Cliente" 
+                                Command="{Binding SalvarClienteCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                VerticalAlignment="Bottom"/>
                     </StackPanel>
 
-                    <!-- Tabela de Clientes -->
-                    <DataGrid Grid.Row="1" AutoGenerateColumns="True" IsReadOnly="True"/>
+                    <DataGrid Grid.Row="1" 
+                              ItemsSource="{Binding Clientes}" 
+                              AutoGenerateColumns="True" 
+                              IsReadOnly="True"/>
                 </Grid>
             </TabItem>
 
             <!-- ABA DE PRODUTOS -->
             <TabItem Header="📦 Produtos">
                 <Grid Margin="0,16,0,0">
-                    <!-- Estrutura para Produtos -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,16">
+                        <TextBox materialDesign:HintAssist.Hint="SKU / Código" 
+                     Text="{Binding CodigoSku, UpdateSourceTrigger=PropertyChanged}"
+                     Width="120" Margin="0,0,10,0" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                        <TextBox materialDesign:HintAssist.Hint="Nome do Produto" 
+                     Text="{Binding NomeProduto, UpdateSourceTrigger=PropertyChanged}"
+                     Width="220" Margin="0,0,10,0" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                        <TextBox materialDesign:HintAssist.Hint="Categoria" 
+                     Text="{Binding Categoria, UpdateSourceTrigger=PropertyChanged}"
+                     Width="140" Margin="0,0,10,0" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                        <TextBox materialDesign:HintAssist.Hint="Preço Unitário (R$)" 
+                     Text="{Binding PrecoUnitario, UpdateSourceTrigger=PropertyChanged}"
+                     Width="130" Margin="0,0,10,0" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                        <Button Content="Salvar Produto" 
+                    Command="{Binding SalvarProdutoCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    VerticalAlignment="Bottom"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding Produtos}" 
+                  AutoGenerateColumns="True" 
+                  IsReadOnly="True"/>
                 </Grid>
             </TabItem>
+
         </TabControl>
     </Grid>
 </UserControl>

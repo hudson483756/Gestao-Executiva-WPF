@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,46 +10,60 @@ namespace Projeto1_Excel.ViewModels
     public partial class CadastroViewModel : ObservableObject
     {
         private readonly ClienteRepository _clienteRepository;
+        private readonly ProdutoRepository _produtoRepository;
 
-        // Propriedades observáveis para os campos de Input do Cliente
+        // ==========================================
+        // CLIENTES
+        // ==========================================
         [ObservableProperty] private string _razaoSocial = string.Empty;
         [ObservableProperty] private string _documento = string.Empty;
         [ObservableProperty] private string _email = string.Empty;
         [ObservableProperty] private string _telefone = string.Empty;
 
-        // Coleção dinâmica que o DataGrid do WPF escuta automaticamente (corrigido { get; })
         public ObservableCollection<Cliente> Clientes { get; } = new();
 
-        public CadastroViewModel(ClienteRepository clienteRepository)
+        // ==========================================
+        // PRODUTOS
+        // ==========================================
+        [ObservableProperty] private string _codigoSku = string.Empty;
+        [ObservableProperty] private string _nomeProduto = string.Empty;
+        [ObservableProperty] private string _categoria = string.Empty;
+        [ObservableProperty] private double _precoUnitario;
+
+        public ObservableCollection<Produto> Produtos { get; } = new();
+
+        public CadastroViewModel(ClienteRepository clienteRepository, ProdutoRepository produtoRepository)
         {
             _clienteRepository = clienteRepository;
-            AtualizarLista();
+            _produtoRepository = produtoRepository;
+
+            AtualizarListaClientes();
+            AtualizarListaProdutos();
         }
 
+        // --- MÉTODOS CLIENTE ---
         [RelayCommand]
         private void SalvarCliente()
         {
-            // Validação básica de negócio
             if (string.IsNullOrWhiteSpace(RazaoSocial) || string.IsNullOrWhiteSpace(Documento))
                 return;
 
-            var novoCliente = new Cliente(
-                Id: 0, // SQLite gera o auto-incremento
-                RazaoSocial: RazaoSocial,
-                Documento: Documento,
-                Email: string.IsNullOrWhiteSpace(Email) ? null : Email,
-                Telefone: string.IsNullOrWhiteSpace(Telefone) ? null : Telefone,
-                DataCadastro: DateTime.Now.ToString("yyyy-MM-dd")
-            );
+            var novoCliente = new Cliente
+            {
+                RazaoSocial = RazaoSocial,
+                Documento = Documento,
+                Email = string.IsNullOrWhiteSpace(Email) ? null : Email,
+                Telefone = string.IsNullOrWhiteSpace(Telefone) ? null : Telefone,
+                DataCadastro = DateTime.Now.ToString("yyyy-MM-dd")
+            };
 
             _clienteRepository.Inserir(novoCliente);
 
-            // Limpa a tela e atualiza a grid
-            LimparCampos();
-            AtualizarLista();
+            LimparCamposCliente();
+            AtualizarListaClientes();
         }
 
-        private void AtualizarLista()
+        private void AtualizarListaClientes()
         {
             Clientes.Clear();
             foreach (var cliente in _clienteRepository.ListarTodos())
@@ -59,12 +72,51 @@ namespace Projeto1_Excel.ViewModels
             }
         }
 
-        private void LimparCampos()
+        private void LimparCamposCliente()
         {
             RazaoSocial = string.Empty;
             Documento = string.Empty;
             Email = string.Empty;
             Telefone = string.Empty;
+        }
+
+        // --- MÉTODOS PRODUTO ---
+        [RelayCommand]
+        private void SalvarProduto()
+        {
+            if (string.IsNullOrWhiteSpace(NomeProduto) || PrecoUnitario <= 0)
+                return;
+
+            var novoProduto = new Produto
+            {
+                CodigoSku = CodigoSku,
+                Nome = NomeProduto,
+                Categoria = Categoria,
+                PrecoUnitario = PrecoUnitario,
+                Ativo = true
+            };
+
+            _produtoRepository.Inserir(novoProduto);
+
+            LimparCamposProduto();
+            AtualizarListaProdutos();
+        }
+
+        private void AtualizarListaProdutos()
+        {
+            Produtos.Clear();
+            foreach (var produto in _produtoRepository.ListarTodos())
+            {
+                Produtos.Add(produto);
+            }
+        }
+
+        private void LimparCamposProduto()
+        {
+            CodigoSku = string.Empty;
+            NomeProduto = string.Empty;
+            Categoria = string.Empty;
+            PrecoUnitario = 0;
         }
     }
 }

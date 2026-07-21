@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
+using Projeto1_Excel.Repositories;
+using Projeto1_Excel.Services;
+using Projeto1_Excel.ViewModels;
 
 namespace Projeto1_Excel.Views
 {
-    /// <summary>
-    /// Interação lógica para FinanceiroView.xam
-    /// </summary>
     public partial class FinanceiroView : UserControl
     {
+        private readonly FinanceiroViewModel _viewModel;
+
         public FinanceiroView()
         {
             InitializeComponent();
+
+            var dbService = new DatabaseService();
+            var clienteRepo = new ClienteRepository(dbService);
+            var produtoRepo = new ProdutoRepository(dbService);
+            var vendaRepo = new VendaRepository(dbService);
+
+            _viewModel = new FinanceiroViewModel(clienteRepo, produtoRepo, vendaRepo);
+            DataContext = _viewModel;
+
+            Loaded += (s, e) => _viewModel.CarregarDados();
         }
     }
 }

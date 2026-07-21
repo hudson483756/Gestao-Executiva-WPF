@@ -8,9 +8,9 @@ namespace Projeto1_Excel.Services;
 
 public class ExcelService
 {
-    public string GerarRelatorioFechamento(IEnumerable<VendaRelatorioDTO> vendas)
+    public string GerarRelatorioFechamento(IEnumerable<Venda> vendas)
     {
-        // Define o caminho temporário para salvar o arquivo e abrir em seguida
+        // Define o caminho no diretório Meus Documentos para salvar o relatório
         string pastaDocumentos = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         string caminhoArquivo = Path.Combine(pastaDocumentos, $"Fechamento_Executivo_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
 
@@ -18,10 +18,10 @@ public class ExcelService
 
         // 1. Configuração da Aba Principal
         var worksheet = workbook.Worksheets.Add("Fechamento de Vendas");
-        worksheet.ShowGridLines = true; // Mantém linhas visíveis para tabelas estruturadas
+        worksheet.ShowGridLines = true;
 
         // 2. Estilização do Cabeçalho
-        string[] cabecalhos = ["ID Venda", "Cliente", "Categoria", "Produto", "Qtd", "Preço Praticado", "Total Venda", "Data"];
+        string[] cabecalhos = ["ID Venda", "Cliente", "Produto", "Qtd", "Preço Praticado", "Total Venda", "Data"];
 
         for (int i = 0; i < cabecalhos.Length; i++)
         {
@@ -29,7 +29,7 @@ public class ExcelService
             celula.Value = cabecalhos[i];
             celula.Style.Font.Bold = true;
             celula.Style.Font.FontColor = XLColor.White;
-            celula.Style.Fill.BackgroundColor = XLColor.FromHtml("#1B365D"); // Nosso Navy Blue Corporativo
+            celula.Style.Fill.BackgroundColor = XLColor.FromHtml("#1B365D"); // Navy Blue Corporativo
             celula.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
         }
 
@@ -37,18 +37,17 @@ public class ExcelService
         int linhaAtual = 2;
         foreach (var v in vendas)
         {
-            worksheet.Cell(linhaAtual, 1).Value = v.VendaId;
-            worksheet.Cell(linhaAtual, 2).Value = v.NomeCliente;
-            worksheet.Cell(linhaAtual, 3).Value = v.CategoriaProduto;
-            worksheet.Cell(linhaAtual, 4).Value = v.NomeProduto;
-            worksheet.Cell(linhaAtual, 5).Value = v.Quantidade;
-            worksheet.Cell(linhaAtual, 6).Value = v.PrecoPraticado;
-            worksheet.Cell(linhaAtual, 7).Value = v.TotalVenda;
-            worksheet.Cell(linhaAtual, 8).Value = v.DataVenda;
+            worksheet.Cell(linhaAtual, 1).Value = v.Id;
+            worksheet.Cell(linhaAtual, 2).Value = v.ClienteNome;
+            worksheet.Cell(linhaAtual, 3).Value = v.ProdutoNome;
+            worksheet.Cell(linhaAtual, 4).Value = v.Quantidade;
+            worksheet.Cell(linhaAtual, 5).Value = v.PrecoUnitario;
+            worksheet.Cell(linhaAtual, 6).Value = v.Total;
+            worksheet.Cell(linhaAtual, 7).Value = v.DataVenda;
 
             // Formatação Monetária nas colunas de preço e total
+            worksheet.Cell(linhaAtual, 5).Style.NumberFormat.Format = "R$ #,##0.00";
             worksheet.Cell(linhaAtual, 6).Style.NumberFormat.Format = "R$ #,##0.00";
-            worksheet.Cell(linhaAtual, 7).Style.NumberFormat.Format = "R$ #,##0.00";
 
             // Estilo Zebrado (Linhas pares ganham fundo cinza bem claro)
             if (linhaAtual % 2 == 0)
@@ -63,12 +62,12 @@ public class ExcelService
 
         // 4. Injeção de Fórmulas Totais na Base do Relatório
         int linhaTotal = linhaAtual + 1;
-        worksheet.Cell(linhaTotal, 6).Value = "Faturamento Total:";
-        worksheet.Cell(linhaTotal, 6).Style.Font.Bold = true;
+        worksheet.Cell(linhaTotal, 5).Value = "Faturamento Total:";
+        worksheet.Cell(linhaTotal, 5).Style.Font.Bold = true;
 
-        // Fórmula nativa do Excel: SUM(G2:G[N])
-        var celulaFormula = worksheet.Cell(linhaTotal, 7);
-        celulaFormula.FormulaA1 = $"SUM(G2:G{linhaAtual - 1})";
+        // Fórmula nativa do Excel: SUM(F2:F[N])
+        var celulaFormula = worksheet.Cell(linhaTotal, 6);
+        celulaFormula.FormulaA1 = $"SUM(F2:F{linhaAtual - 1})";
         celulaFormula.Style.Font.Bold = true;
         celulaFormula.Style.NumberFormat.Format = "R$ #,##0.00";
         celulaFormula.Style.Fill.BackgroundColor = XLColor.FromHtml("#E2E8F0");

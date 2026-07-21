@@ -1,3 +1,14 @@
-bin/ 
-obj/ 
-.vs/ 
+## Compilação e Binários
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+## Banco de Dados SQLite Local
+*.db
+*.db-shm
+*.db-wal
+
+## Arquivos Excel Gerados nos Testes
+*.xlsx

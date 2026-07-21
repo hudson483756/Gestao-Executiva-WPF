@@ -6,11 +6,8 @@
 
     <Grid Margin="24">
         <Grid.RowDefinitions>
-            <!-- Linha 0: Título -->
             <RowDefinition Height="Auto"/>
-            <!-- Linha 1: Formulário de Lançamento -->
             <RowDefinition Height="Auto"/>
-            <!-- Linha 2: Tabela de Dados -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -29,20 +26,33 @@
         <!-- 2. Formulário de Ações -->
         <Border Grid.Row="1" Background="#F8FAFC" CornerRadius="8" Padding="16" Margin="0,0,0,20">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                <!-- ComboBox de Clientes -->
                 <ComboBox materialDesign:HintAssist.Hint="Selecionar Cliente" 
+                          ItemsSource="{Binding Clientes}"
+                          SelectedItem="{Binding ClienteSelecionado}"
+                          DisplayMemberPath="RazaoSocial"
                           Width="220" 
                           Margin="0,0,12,0"/>
 
+                <!-- ComboBox de Produtos -->
                 <ComboBox materialDesign:HintAssist.Hint="Selecionar Produto" 
+                          ItemsSource="{Binding Produtos}"
+                          SelectedItem="{Binding ProdutoSelecionado}"
+                          DisplayMemberPath="Nome"
                           Width="220" 
                           Margin="0,0,12,0"/>
 
+                <!-- Quantidade -->
                 <TextBox materialDesign:HintAssist.Hint="Qtd" 
+                         Text="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged}"
                          Width="80" 
                          Margin="0,0,16,0" 
                          HorizontalContentAlignment="Center"/>
 
+                <!-- Botão de Lançar -->
                 <Button Content="Lançar Venda" 
+                        Command="{Binding LancarVendaCommand}"
                         Background="#2E7D32" 
                         BorderBrush="#2E7D32" 
                         Style="{StaticResource MaterialDesignRaisedButton}"/>
@@ -50,6 +60,9 @@
         </Border>
 
         <!-- 3. Tabela de Lançamentos -->
-        <DataGrid Grid.Row="2" AutoGenerateColumns="True" IsReadOnly="True"/>
+        <DataGrid Grid.Row="2" 
+          ItemsSource="{Binding Vendas}" 
+          AutoGenerateColumns="True" 
+          IsReadOnly="True"/>
     </Grid>
 </UserControl>

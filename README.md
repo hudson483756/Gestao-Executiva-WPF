@@ -33,6 +33,7 @@ Projeto1-Excel/
 │── Views/           # Interfaces de usuário XAML (Cadastro, Financeiro, Relatórios)
 │── Services/        # Serviços de Banco de Dados e manipulação de Excel
 │── Repositories/    # Acesso e persistência de dados via Dapper
+```
 
 ## 🎥 Demonstração em Ação
 
